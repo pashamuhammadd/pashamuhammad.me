@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ========================= */
+/* ARTICLE CONTENT STYLING */
+/* ========================= */
+
+.article-content {
+  color: #d1d5db;
+  font-size: 1rem;
+}
+
+.article-content p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.article-content h2 {
+  margin-top: 1.6rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  font-weight: 800;
+  color: white;
+}
+
+.article-content ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.article-content li {
+  margin-bottom: 0.5rem;
+  display: list-item;
+}
+
+.article-content blockquote {
+  margin: 1.3rem 0;
+  border-left: 4px solid #34d399;
+  padding: 0.85rem 1rem;
+  background: rgba(52, 211, 153, 0.08);
+  border-radius: 0 0.9rem 0.9rem 0;
+  font-style: italic;
+  color: #d1d5db;
+}
+
+.article-content blockquote::before {
+  content: "“";
+  color: #34d399;
+  font-size: 2rem;
+  line-height: 1;
+  margin-right: 0.35rem;
+}
+
+.article-content strong {
+  color: white;
+  font-weight: 800;
+}
+
+.article-content em {
+  color: #e5e7eb;
+}
