@@ -35,46 +35,55 @@ const projects = [
 
 export default function ProjectsSection() {
   return (
-    <section className="min-h-[75vh] px-8 md:px-20 flex items-center">
+    <section className="w-full overflow-hidden px-4 py-14 sm:px-6 md:px-12 md:py-16 lg:px-20">
       <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 25, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.6 }}
-          className="mb-10"
+          className="mb-10 text-center md:text-left"
         >
-          <p className="text-emerald-400 font-semibold mb-3">Projects</p>
+          <p className="mb-3 font-semibold text-emerald-400">
+            Projects
+          </p>
 
-          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+          <h2 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
             Proof of execution,
             <br />
-            <span className="text-emerald-400">not just ideas.</span>
+            <span className="text-emerald-400">
+              not just ideas.
+            </span>
           </h2>
 
-          <p className="text-gray-400 max-w-2xl mt-5 leading-relaxed">
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base md:mx-0">
             These are the ventures and products I am building to turn vision
             into real digital businesses.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 35, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.55, delay: index * 0.12 }}
+              transition={{
+                duration: 0.55,
+                delay: index * 0.12,
+              }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 overflow-hidden transition hover:border-emerald-400/80"
+              className="group relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 transition hover:border-emerald-400/80 sm:p-6"
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.22),transparent_45%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.22),transparent_45%)] opacity-0 transition duration-500 group-hover:opacity-100" />
 
               <div className="relative z-10">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm text-gray-400">{project.type}</p>
+                    <p className="text-xs text-gray-400 sm:text-sm">
+                      {project.type}
+                    </p>
 
-                    <h3 className="text-2xl font-bold mt-3">
+                    <h3 className="mt-3 text-xl font-bold sm:text-2xl">
                       {project.title}
                     </h3>
                   </div>
@@ -84,7 +93,7 @@ export default function ProjectsSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open ${project.title}`}
-                    className="w-10 h-10 rounded-full border border-emerald-400/30 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-400 group-hover:text-black transition"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-400/30 text-emerald-400 transition group-hover:bg-emerald-400 group-hover:text-black"
                   >
                     <ArrowUpRight size={18} />
                   </a>
@@ -94,15 +103,15 @@ export default function ProjectsSection() {
                   {project.status}
                 </div>
 
-                <p className="text-gray-400 leading-relaxed mt-5 min-h-[120px]">
+                <p className="mt-5 text-sm leading-relaxed text-gray-400 sm:text-base">
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mt-6">
+                <div className="mt-6 flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs rounded-full bg-emerald-400/10 text-emerald-400 px-3 py-1"
+                      className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs text-emerald-400"
                     >
                       {tag}
                     </span>

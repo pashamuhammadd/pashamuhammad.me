@@ -62,24 +62,25 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="min-h-[75vh] px-8 md:px-20 py-24 flex items-center"
+      className="flex w-full items-center overflow-hidden px-4 py-16 sm:px-6 md:px-12 md:py-20 lg:px-20 lg:py-24"
     >
-      <div className="w-full grid md:grid-cols-[1fr_1.1fr] gap-12 items-center">
+      <div className="grid w-full items-center gap-10 md:grid-cols-[1fr_1.1fr] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, x: -35 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.6 }}
+          className="text-center md:text-left"
         >
-          <p className="text-emerald-400 font-semibold mb-3">Contact</p>
+          <p className="mb-3 font-semibold text-emerald-400">Contact</p>
 
-          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+          <h2 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
             Let&apos;s build
             <br />
             <span className="text-emerald-400">something meaningful.</span>
           </h2>
 
-          <p className="text-gray-400 mt-5 max-w-xl leading-relaxed">
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray-400 sm:text-base md:mx-0">
             I am open to strategic partnerships, grant opportunities,
             investment discussions, and collaborations around games, Web3, AI,
             and digital ventures.
@@ -87,13 +88,13 @@ export default function ContactSection() {
 
           <a
             href="mailto:mochnuribrahimpasha@gmail.com"
-            className="inline-flex items-center gap-3 mt-8 border border-emerald-400 text-emerald-400 px-6 py-3 rounded-full hover:bg-emerald-400 hover:text-black transition"
+            className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full border border-emerald-400 px-6 py-3 text-emerald-400 transition hover:bg-emerald-400 hover:text-black sm:w-auto"
           >
             <Mail size={18} />
             Email Me
           </a>
 
-          <div className="flex items-center gap-3 mt-6">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 md:justify-start">
             {socialLinks.map((item, index) => {
               const Icon = item.icon;
 
@@ -113,7 +114,7 @@ export default function ContactSection() {
                     delay: 0.15 + index * 0.06,
                   }}
                   whileHover={{ y: -4, scale: 1.06 }}
-                  className="w-11 h-11 rounded-full border border-emerald-400/20 bg-white/[0.04] text-emerald-400 flex items-center justify-center hover:border-emerald-400 hover:bg-emerald-400 hover:text-black transition"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-emerald-400/20 bg-white/[0.04] text-emerald-400 transition hover:border-emerald-400 hover:bg-emerald-400 hover:text-black"
                 >
                   <Icon size={18} />
                 </motion.a>
@@ -134,16 +135,18 @@ export default function ContactSection() {
                 viewport={{ once: true, amount: 0.35 }}
                 transition={{ duration: 0.55, delay: index * 0.12 }}
                 whileHover={{ x: -8 }}
-                className="rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 hover:border-emerald-400 transition"
+                className="rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 transition hover:border-emerald-400 sm:p-6"
               >
-                <div className="flex gap-5 items-start">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-400/10 text-emerald-400 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:gap-5 sm:text-left">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-400">
                     <Icon size={22} />
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-bold">{item.title}</h3>
-                    <p className="text-gray-400 mt-2 leading-relaxed">
+                    <h3 className="text-lg font-bold sm:text-xl">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-400 sm:text-base">
                       {item.description}
                     </p>
                   </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Hero from "./Hero";
 import AboutSection from "./AboutSection";
@@ -15,39 +15,79 @@ const navItems = ["Home", "About", "Projects", "Milestones", "Notes", "Contact"]
 export default function ProfileApp() {
   const [activeSection, setActiveSection] = useState("Home");
 
-  return (
-    <main className="min-h-screen bg-[#1f1f27] text-white px-8 md:px-20 overflow-hidden">
-      <nav className="flex items-center justify-between py-8">
-        <h1
-          onClick={() => setActiveSection("Home")}
-          className="text-xl md:text-2xl font-semibold tracking-wider cursor-pointer transition-all duration-300 hover:text-emerald-400"
-        >
-          pashamuhammad
-          <span className="text-emerald-400">.me</span>
-        </h1>
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
 
-        <div className="hidden md:flex gap-8 text-sm text-gray-300">
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
+
+  const handleChangeSection = (item: string) => {
+    setActiveSection(item);
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <main className="min-h-screen overflow-hidden bg-[#1f1f27] text-white">
+      <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#1f1f27]/90 px-4 py-4 backdrop-blur-xl sm:px-6 md:px-12 lg:px-20">
+        <div className="flex items-center justify-between gap-4">
+          <h1
+            onClick={() => handleChangeSection("Home")}
+            className="cursor-pointer text-base font-semibold tracking-wider transition-all duration-300 hover:text-emerald-400 sm:text-xl md:text-2xl"
+          >
+            pashamuhammad
+            <span className="text-emerald-400">.me</span>
+          </h1>
+
+          <div className="hidden items-center gap-8 text-sm text-gray-300 md:flex">
+            {navItems.map((item) => (
+              <button
+                key={item}
+                onClick={() => handleChangeSection(item)}
+                className={`pb-1 transition ${
+                  activeSection === item
+                    ? "border-b border-emerald-400 text-emerald-400"
+                    : "hover:text-emerald-400"
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => handleChangeSection("Contact")}
+            className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-semibold text-black transition hover:bg-emerald-300 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            Contact
+          </button>
+        </div>
+
+        <div className="mt-4 flex flex-wrap justify-center gap-3 pb-1 text-xs text-gray-300 md:hidden">
           {navItems.map((item) => (
             <button
               key={item}
-              onClick={() => setActiveSection(item)}
-              className={`pb-1 transition ${
+              onClick={() => handleChangeSection(item)}
+              className={`shrink-0 rounded-full px-3.5 py-2 transition ${
                 activeSection === item
-                  ? "text-emerald-400 border-b border-emerald-400"
-                  : "hover:text-emerald-400"
+                  ? "bg-emerald-400 text-black"
+                  : "bg-white/[0.04] hover:text-emerald-400"
               }`}
             >
               {item}
             </button>
           ))}
         </div>
-
-        <button
-          onClick={() => setActiveSection("Contact")}
-          className="bg-emerald-400 text-black px-6 py-3 rounded-full font-semibold"
-        >
-          Contact Me
-        </button>
       </nav>
 
       <AnimatePresence mode="wait">
@@ -59,31 +99,13 @@ export default function ProfileApp() {
           transition={{ duration: 0.45, ease: "easeInOut" }}
         >
           {activeSection === "Home" && <Hero />}
-
-{activeSection === "About" && <AboutSection />}
-
-{activeSection === "Projects" && <ProjectsSection />}
-
-{activeSection === "Milestones" && <MilestonesSection />}
-
-{activeSection === "Notes" && <NotesSection />}
-
-{activeSection === "Contact" && <ContactSection />}
-
-{activeSection !== "Home" && activeSection !== "About" && activeSection !== "Projects" && activeSection !== "Milestones" && activeSection !== "Notes" && activeSection !== "Contact" && (
-  <section className="min-h-[75vh] flex items-center justify-center">
-    <div className="text-center">
-      <p className="text-emerald-400 mb-3">Section</p>
-      <h2 className="text-5xl font-bold">{activeSection}</h2>
-      <p className="text-gray-400 mt-4">
-        Content for {activeSection} will be added here.
-      </p>
-    </div>
-  </section>
-)}
+          {activeSection === "About" && <AboutSection />}
+          {activeSection === "Projects" && <ProjectsSection />}
+          {activeSection === "Milestones" && <MilestonesSection />}
+          {activeSection === "Notes" && <NotesSection />}
+          {activeSection === "Contact" && <ContactSection />}
         </motion.div>
       </AnimatePresence>
-
 
       <Footer />
     </main>

@@ -80,7 +80,8 @@ export async function generateMetadata({
         },
       ],
       publishedTime: article.published_at || article.created_at,
-      modifiedTime: article.updated_at || article.published_at || article.created_at,
+      modifiedTime:
+        article.updated_at || article.published_at || article.created_at,
       authors: ["Pasha Muhammad"],
     },
     twitter: {
@@ -103,7 +104,7 @@ export default async function NoteDetailPage({ params }: PageProps) {
 
   if (!article) {
     return (
-      <main className="min-h-screen bg-[#1f1f27] px-6 py-8 text-white md:px-16">
+      <main className="min-h-screen overflow-hidden bg-[#1f1f27] px-4 py-8 text-white sm:px-6 md:px-12 lg:px-16">
         <Link
           href="/notes"
           className="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-emerald-400"
@@ -112,9 +113,11 @@ export default async function NoteDetailPage({ params }: PageProps) {
           Back to Notes
         </Link>
 
-        <div className="mt-12 rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-7">
-          <h1 className="text-3xl font-bold">Article not found</h1>
-          <p className="mt-4 text-gray-400">
+        <div className="mt-12 rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 sm:p-7">
+          <h1 className="text-2xl font-bold sm:text-3xl">
+            Article not found
+          </h1>
+          <p className="mt-4 text-sm leading-relaxed text-gray-400 sm:text-base">
             No published article found for slug:{" "}
             <span className="text-emerald-400">{slug}</span>
           </p>
@@ -124,8 +127,8 @@ export default async function NoteDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-[#1f1f27] px-6 py-8 text-white md:px-16">
-      <nav className="mb-8 flex items-center justify-between">
+    <main className="min-h-screen overflow-hidden bg-[#1f1f27] px-4 py-8 text-white sm:px-6 md:px-12 lg:px-16">
+      <nav className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/notes"
           className="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-emerald-400"
@@ -145,11 +148,11 @@ export default async function NoteDetailPage({ params }: PageProps) {
             <img
               src={article.cover_image}
               alt={article.title}
-              className="h-[180px] w-full object-cover md:h-[280px]"
+              className="h-[180px] w-full object-cover sm:h-[220px] md:h-[280px]"
             />
           </div>
         ) : (
-          <div className="mb-7 flex h-[180px] items-center justify-center rounded-3xl border border-emerald-400/20 bg-emerald-400/10 md:h-[260px]">
+          <div className="mb-7 flex h-[180px] items-center justify-center rounded-3xl border border-emerald-400/20 bg-emerald-400/10 sm:h-[220px] md:h-[260px]">
             <div className="flex flex-col items-center text-emerald-400">
               <ImageIcon size={34} />
               <span className="mt-3 text-xs">No Cover Image</span>
@@ -163,12 +166,12 @@ export default async function NoteDetailPage({ params }: PageProps) {
           </span>
         </div>
 
-        <h1 className="text-3xl font-bold leading-tight md:text-5xl">
+        <h1 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
           {article.title}
         </h1>
 
         {article.excerpt && (
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-gray-400">
+          <p className="mt-5 max-w-3xl text-sm leading-relaxed text-gray-400 sm:text-base">
             {article.excerpt}
           </p>
         )}
@@ -191,9 +194,9 @@ export default async function NoteDetailPage({ params }: PageProps) {
           </span>
         </div>
 
-        <div className="mt-8 rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 md:p-8">
+        <div className="mt-8 rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 sm:p-6 md:p-8">
           <div
-            className="article-content"
+            className="article-content break-words text-sm leading-relaxed sm:text-base"
             dangerouslySetInnerHTML={{
               __html: article.content || "<p>No content available yet.</p>",
             }}

@@ -114,7 +114,7 @@ export default function MilestonesSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden px-6 py-24 md:px-20"
+      className="relative w-full overflow-hidden px-4 py-16 sm:px-6 md:px-12 md:py-20 lg:px-20 lg:py-24"
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.1),transparent_32%)]" />
 
@@ -124,13 +124,13 @@ export default function MilestonesSection() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="mb-14"
+          className="mb-10 text-center md:mb-14 md:text-left"
         >
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-emerald-400">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400 sm:text-sm sm:tracking-[0.3em]">
             Founder Journey
           </p>
 
-          <h2 className="max-w-4xl text-4xl font-bold leading-tight md:text-6xl">
+          <h2 className="mx-auto max-w-4xl text-3xl font-bold leading-tight sm:text-4xl md:mx-0 md:text-5xl lg:text-6xl">
             From community builder
             <br />
             to{" "}
@@ -139,13 +139,13 @@ export default function MilestonesSection() {
             </span>
           </h2>
 
-          <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-400 md:text-lg">
+          <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-gray-400 sm:text-base md:mx-0 md:mt-6 md:text-lg">
             A journey of building communities, creative teams, digital products,
             and game ventures across Web3, gaming, and emerging technology.
           </p>
         </motion.div>
 
-        <div className="mb-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-14 grid grid-cols-2 gap-4 md:mb-20 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -157,25 +157,27 @@ export default function MilestonesSection() {
                 delay: index * 0.08,
                 ease: "easeOut",
               }}
-              className="rounded-3xl border border-emerald-400/15 bg-white/[0.04] p-5 backdrop-blur-xl"
+              className="rounded-3xl border border-emerald-400/15 bg-white/[0.04] p-4 text-center backdrop-blur-xl sm:p-5"
             >
-              <h3 className="text-3xl font-bold text-emerald-400">
+              <h3 className="text-2xl font-bold text-emerald-400 sm:text-3xl">
                 {stat.value}
               </h3>
-              <p className="mt-2 text-sm text-gray-400">{stat.label}</p>
+              <p className="mt-2 text-xs text-gray-400 sm:text-sm">
+                {stat.label}
+              </p>
             </motion.div>
           ))}
         </div>
 
         <div className="relative">
-          <div className="absolute left-4 top-0 h-full w-px bg-white/10 md:left-1/2" />
+          <div className="absolute left-3 top-0 h-full w-px bg-white/10 md:left-1/2" />
 
           <motion.div
             style={{ scaleY }}
-            className="absolute left-4 top-0 h-full w-px origin-top bg-gradient-to-b from-emerald-300 via-emerald-400 to-transparent md:left-1/2"
+            className="absolute left-3 top-0 h-full w-px origin-top bg-gradient-to-b from-emerald-300 via-emerald-400 to-transparent md:left-1/2"
           />
 
-          <div className="space-y-10">
+          <div className="space-y-8 md:space-y-10">
             {milestones.map((item, index) => {
               const isLeft = index % 2 === 0;
 
@@ -184,8 +186,8 @@ export default function MilestonesSection() {
                   key={`${item.year}-${item.title}`}
                   initial={{
                     opacity: 0,
-                    y: 70,
-                    scale: 0.96,
+                    y: 60,
+                    scale: 0.98,
                     filter: "blur(12px)",
                   }}
                   whileInView={{
@@ -194,10 +196,10 @@ export default function MilestonesSection() {
                     scale: 1,
                     filter: "blur(0px)",
                   }}
-                  viewport={{ once: true, amount: 0.25 }}
+                  viewport={{ once: true, amount: 0.2 }}
                   transition={{
                     duration: 0.6,
-                    delay: index * 0.05,
+                    delay: index * 0.04,
                     ease: "easeOut",
                   }}
                   className="relative grid gap-8 md:grid-cols-2"
@@ -205,18 +207,18 @@ export default function MilestonesSection() {
                   <div
                     className={
                       isLeft
-                        ? "pl-12 md:pl-0 md:pr-16"
-                        : "pl-12 md:col-start-2 md:pl-16"
+                        ? "pl-9 sm:pl-12 md:pl-0 md:pr-16"
+                        : "pl-9 sm:pl-12 md:col-start-2 md:pl-16"
                     }
                   >
                     <motion.div
                       whileHover={{ y: -8, scale: 1.015 }}
                       transition={{ duration: 0.25 }}
-                      className={`group relative overflow-hidden rounded-3xl border border-emerald-400/15 bg-white/[0.045] p-6 backdrop-blur-xl transition duration-300 hover:border-emerald-400/70 ${
+                      className={`group relative overflow-hidden rounded-3xl border border-emerald-400/15 bg-white/[0.045] p-5 backdrop-blur-xl transition duration-300 hover:border-emerald-400/70 sm:p-6 ${
                         isLeft ? "" : "md:text-right"
                       }`}
                     >
-                      <div className="absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.2),transparent_42%)]" />
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.2),transparent_42%)] opacity-0 transition duration-500 group-hover:opacity-100" />
 
                       <div className="relative z-10">
                         <div
@@ -224,7 +226,7 @@ export default function MilestonesSection() {
                             isLeft ? "justify-start" : "md:justify-end"
                           }`}
                         >
-                          <span className="text-xl font-bold text-emerald-400">
+                          <span className="text-lg font-bold text-emerald-400 sm:text-xl">
                             {item.year}
                           </span>
 
@@ -233,11 +235,11 @@ export default function MilestonesSection() {
                           </span>
                         </div>
 
-                        <h3 className="mt-4 text-2xl font-bold text-white">
+                        <h3 className="mt-4 text-xl font-bold text-white sm:text-2xl">
                           {item.title}
                         </h3>
 
-                        <p className="mt-4 leading-relaxed text-gray-400">
+                        <p className="mt-4 text-sm leading-relaxed text-gray-400 sm:text-base">
                           {item.description}
                         </p>
 
@@ -247,7 +249,7 @@ export default function MilestonesSection() {
                           }`}
                         >
                           <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-                            <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 sm:text-xs">
                               Impact
                             </p>
                             <p className="mt-1 text-sm font-semibold text-emerald-300">
@@ -260,7 +262,7 @@ export default function MilestonesSection() {
                   </div>
 
                   <motion.div
-                    className="absolute left-[9px] top-8 h-5 w-5 rounded-full border border-emerald-300 bg-black shadow-[0_0_30px_rgba(52,211,153,0.85)] md:left-1/2 md:-translate-x-1/2"
+                    className="absolute left-[4px] top-8 h-5 w-5 rounded-full border border-emerald-300 bg-black shadow-[0_0_30px_rgba(52,211,153,0.85)] md:left-1/2 md:-translate-x-1/2"
                     whileInView={{
                       scale: [0.8, 1.25, 1],
                       opacity: [0.6, 1, 1],
@@ -270,7 +272,7 @@ export default function MilestonesSection() {
                   />
 
                   <motion.div
-                    className="absolute left-[15px] top-[38px] h-2 w-2 rounded-full bg-emerald-300 md:left-1/2 md:-translate-x-1/2"
+                    className="absolute left-[10px] top-[38px] h-2 w-2 rounded-full bg-emerald-300 md:left-1/2 md:-translate-x-1/2"
                     animate={{
                       scale: [1, 1.5, 1],
                       opacity: [0.55, 1, 0.55],

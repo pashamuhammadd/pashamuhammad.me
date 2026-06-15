@@ -31,8 +31,8 @@ export default async function NotesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#1f1f27] px-8 py-10 text-white md:px-20">
-      <nav className="mb-14 flex items-center justify-between">
+    <main className="min-h-screen overflow-hidden bg-[#1f1f27] px-4 py-8 text-white sm:px-6 md:px-12 md:py-10 lg:px-20">
+      <nav className="mb-12 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between md:mb-14">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-emerald-400"
@@ -41,37 +41,37 @@ export default async function NotesPage() {
           Back to Home
         </Link>
 
-        <h1 className="text-xl font-bold">
+        <h1 className="text-lg font-bold sm:text-xl">
           pashamuhammad<span className="text-emerald-400">.me</span>
         </h1>
       </nav>
 
-      <section className="mb-10">
-        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-emerald-400">
+      <section className="mb-10 text-center md:text-left">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400 sm:text-sm sm:tracking-[0.3em]">
           Notes
         </p>
 
-        <h2 className="text-4xl font-bold leading-tight md:text-6xl">
+        <h2 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
           Articles, thoughts,
           <br />
           <span className="text-emerald-400">and builder logs.</span>
         </h2>
 
-        <p className="mt-5 max-w-2xl leading-relaxed text-gray-400">
+        <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base md:mx-0">
           A collection of notes from my journey building products, communities,
           games, grants, and digital ventures.
         </p>
       </section>
 
       {!articles || articles.length === 0 ? (
-        <section className="rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-8 text-center">
+        <section className="rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 text-center sm:p-8">
           <p className="text-lg font-semibold text-white">No articles yet.</p>
-          <p className="mt-2 text-gray-400">
+          <p className="mt-2 text-sm text-gray-400 sm:text-base">
             Published articles will appear here automatically.
           </p>
         </section>
       ) : (
-        <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {(articles as Article[]).map((article) => (
             <Link
               key={article.id}
@@ -79,7 +79,7 @@ export default async function NotesPage() {
               className="group overflow-hidden rounded-3xl border border-emerald-400/20 bg-white/[0.04] transition hover:-translate-y-2 hover:border-emerald-400/80"
             >
               {article.cover_image ? (
-                <div className="h-48 w-full overflow-hidden bg-black/20">
+                <div className="h-44 w-full overflow-hidden bg-black/20 sm:h-48">
                   <img
                     src={article.cover_image}
                     alt={article.title}
@@ -87,7 +87,7 @@ export default async function NotesPage() {
                   />
                 </div>
               ) : (
-                <div className="flex h-48 w-full items-center justify-center bg-emerald-400/10">
+                <div className="flex h-44 w-full items-center justify-center bg-emerald-400/10 sm:h-48">
                   <div className="flex flex-col items-center text-emerald-400">
                     <ImageIcon size={32} />
                     <span className="mt-3 text-xs">No Cover Image</span>
@@ -95,7 +95,7 @@ export default async function NotesPage() {
                 </div>
               )}
 
-              <div className="p-6">
+              <div className="p-5 sm:p-6">
                 <div className="mb-5 flex items-start justify-between gap-4">
                   <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs text-emerald-400">
                     {article.category}
@@ -103,13 +103,15 @@ export default async function NotesPage() {
 
                   <ArrowUpRight
                     size={18}
-                    className="text-emerald-400 transition group-hover:translate-x-1 group-hover:-translate-y-1"
+                    className="shrink-0 text-emerald-400 transition group-hover:translate-x-1 group-hover:-translate-y-1"
                   />
                 </div>
 
-                <h3 className="text-2xl font-bold">{article.title}</h3>
+                <h3 className="text-xl font-bold sm:text-2xl">
+                  {article.title}
+                </h3>
 
-                <p className="mt-4 leading-relaxed text-gray-400">
+                <p className="mt-4 text-sm leading-relaxed text-gray-400 sm:text-base">
                   {article.excerpt || "No excerpt available."}
                 </p>
 

@@ -39,19 +39,19 @@ const highlights = [
 
 export default function AboutSection() {
   return (
-    <section className="px-8 md:px-20 py-10">
-      <div className="grid w-full items-start gap-10 md:grid-cols-[0.95fr_1.15fr]">
+    <section className="w-full overflow-hidden px-4 py-14 sm:px-6 md:px-12 md:py-16 lg:px-20">
+      <div className="grid w-full items-start gap-10 md:grid-cols-[0.95fr_1.15fr] lg:gap-14">
         <motion.div
           initial={{ opacity: 0, x: -35, filter: "blur(10px)" }}
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.65, ease: "easeOut" }}
-          className="pt-4"
+          className="text-center md:pt-4 md:text-left"
         >
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-emerald-400">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400 sm:text-sm sm:tracking-[0.3em]">
             About Me
           </p>
 
-          <h2 className="text-4xl font-bold leading-tight md:text-5xl">
+          <h2 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
             I build with
             <br />
             <span className="text-emerald-400">
@@ -59,13 +59,13 @@ export default function AboutSection() {
             </span>
           </h2>
 
-          <p className="mt-6 max-w-xl leading-relaxed text-gray-400">
+          <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-gray-400 sm:text-base md:mx-0">
             My name is Pasha Muhammad. I am an Indonesian founder building at
             the intersection of gaming, Web3, community, and emerging
             technology.
           </p>
 
-          <p className="mt-4 max-w-xl leading-relaxed text-gray-400">
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray-400 sm:text-base md:mx-0">
             I believe the future belongs to builders who can combine creativity,
             technology, and community into products that create real value. That
             belief drives everything I build today, from Lifetopia World to
@@ -82,7 +82,7 @@ export default function AboutSection() {
                   duration: 0.45,
                   delay: 0.12 + index * 0.07,
                 }}
-                className="rounded-2xl border border-emerald-400/20 bg-white/[0.035] px-4 py-3 text-sm font-medium text-white transition hover:border-emerald-400/70"
+                className="rounded-2xl border border-emerald-400/20 bg-white/[0.035] px-4 py-3 text-center text-sm font-medium text-white transition hover:border-emerald-400/70 sm:text-left"
               >
                 {item}
               </motion.div>
@@ -96,16 +96,18 @@ export default function AboutSection() {
           transition={{ duration: 0.65, delay: 0.1, ease: "easeOut" }}
           className="space-y-4"
         >
-          <div className="relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 backdrop-blur-xl">
-            <div className="relative z-10 flex gap-5">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-400">
+          <div className="relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 backdrop-blur-xl sm:p-6">
+            <div className="relative z-10 flex flex-col gap-4 text-center sm:flex-row sm:gap-5 sm:text-left">
+              <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-400 sm:mx-0">
                 <Sparkles size={22} />
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold">Founder Philosophy</h3>
+                <h3 className="text-xl font-bold sm:text-2xl">
+                  Founder Philosophy
+                </h3>
 
-                <p className="mt-3 leading-relaxed text-gray-400">
+                <p className="mt-3 text-sm leading-relaxed text-gray-400 sm:text-base">
                   I do not see ideas as something to only be imagined. I see
                   them as something to be tested, built, launched, improved, and
                   turned into long-term businesses.
@@ -129,9 +131,9 @@ export default function AboutSection() {
                     ease: "easeOut",
                   }}
                   whileHover={{ y: -6, scale: 1.02 }}
-                  className="group rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 transition hover:border-emerald-400/70"
+                  className="group rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 text-center transition hover:border-emerald-400/70 sm:text-left"
                 >
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-400 transition group-hover:bg-emerald-400 group-hover:text-black">
+                  <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-400 transition group-hover:bg-emerald-400 group-hover:text-black sm:mx-0">
                     <Icon size={20} />
                   </div>
 
