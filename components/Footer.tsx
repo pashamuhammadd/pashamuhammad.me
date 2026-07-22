@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="mt-10 border-t border-emerald-400/10">
@@ -21,10 +23,26 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 border-t border-emerald-400/10 pt-6">
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-emerald-400/10 pt-6 sm:flex-row">
           <p className="text-center text-xs text-gray-500 sm:text-sm md:text-left">
             © 2026 Pasha Muhammad. All Rights Reserved.
           </p>
+
+          <div className="flex items-center gap-5">
+            <Link
+              href="/dev-log"
+              className="text-xs text-gray-500 transition hover:text-emerald-400 sm:text-sm"
+            >
+              Dev Log
+            </Link>
+
+            <Link
+              href="/cv"
+              className="text-xs text-gray-500 transition hover:text-emerald-400 sm:text-sm"
+            >
+              View CV
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

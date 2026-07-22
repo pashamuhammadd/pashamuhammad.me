@@ -7,10 +7,19 @@ import AboutSection from "./AboutSection";
 import ProjectsSection from "./ProjectsSection";
 import MilestonesSection from "./MilestonesSection";
 import NotesSection from "./NotesSection";
+import TestimonialsSection from "./TestimonialsSection";
 import ContactSection from "./ContactSection";
 import Footer from "./Footer";
 
-const navItems = ["Home", "About", "Projects", "Milestones", "Notes", "Contact"];
+const navItems = [
+  "Home",
+  "About",
+  "Projects",
+  "Milestones",
+  "Notes",
+  "Testimonials",
+  "Contact",
+];
 
 export default function ProfileApp() {
   const [activeSection, setActiveSection] = useState("Home");
@@ -103,6 +112,7 @@ export default function ProfileApp() {
           {activeSection === "Projects" && <ProjectsSection />}
           {activeSection === "Milestones" && <MilestonesSection />}
           {activeSection === "Notes" && <NotesSection />}
+          {activeSection === "Testimonials" && <TestimonialsSection />}
           {activeSection === "Contact" && <ContactSection />}
         </motion.div>
       </AnimatePresence>

@@ -36,6 +36,7 @@ const categories = [
 export default function NotesSection() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     async function fetchArticles() {
@@ -56,6 +57,19 @@ export default function NotesSection() {
 
     fetchArticles();
   }, []);
+
+  const categoriesInUse = Array.from(
+    new Set(articles.map((article) => article.category))
+  );
+
+  const visibleCategories = categories.filter(
+    (category) => category === "All" || categoriesInUse.includes(category)
+  );
+
+  const filteredArticles =
+    selectedCategory === "All"
+      ? articles
+      : articles.filter((article) => article.category === selectedCategory);
 
   return (
     <section className="w-full overflow-hidden px-4 py-14 sm:px-6 md:px-12 md:py-16 lg:px-20">
@@ -107,12 +121,13 @@ export default function NotesSection() {
           transition={{ duration: 0.45, delay: 0.08 }}
           className="mb-6 flex gap-3 overflow-x-auto pb-2"
         >
-          {categories.map((category, index) => (
+          {visibleCategories.map((category) => (
             <button
               key={category}
               type="button"
+              onClick={() => setSelectedCategory(category)}
               className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium transition ${
-                index === 0
+                selectedCategory === category
                   ? "border-emerald-400 bg-emerald-400 text-black"
                   : "border-emerald-400/20 bg-white/[0.035] text-gray-300 hover:border-emerald-400 hover:text-emerald-400"
               }`}
@@ -140,9 +155,22 @@ export default function NotesSection() {
               automatically.
             </p>
           </div>
+        ) : filteredArticles.length === 0 ? (
+          <div className="rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-6 text-center sm:text-left">
+            <FileText
+              className="mx-auto text-emerald-400 sm:mx-0"
+              size={28}
+            />
+            <h3 className="mt-4 text-xl font-bold text-white sm:text-2xl">
+              No notes in &quot;{selectedCategory}&quot; yet
+            </h3>
+            <p className="mt-3 text-sm text-gray-400">
+              Try another category or view all notes.
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {articles.slice(0, 3).map((article, index) => (
+            {filteredArticles.slice(0, 3).map((article, index) => (
               <motion.article
                 key={article.id}
                 initial={{ opacity: 0, y: 35, scale: 0.96 }}

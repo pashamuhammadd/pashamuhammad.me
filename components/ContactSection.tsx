@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, MessageCircle, Handshake, Rocket } from "lucide-react";
+import { FileText, Mail, MessageCircle, Handshake, Rocket } from "lucide-react";
 import {
   FaGithub,
   FaLinkedin,
@@ -86,13 +87,23 @@ export default function ContactSection() {
             and digital ventures.
           </p>
 
-          <a
-            href="mailto:mochnuribrahimpasha@gmail.com"
-            className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full border border-emerald-400 px-6 py-3 text-emerald-400 transition hover:bg-emerald-400 hover:text-black sm:w-auto"
-          >
-            <Mail size={18} />
-            Email Me
-          </a>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row md:justify-start">
+            <a
+              href="mailto:mochnuribrahimpasha@gmail.com"
+              className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-emerald-400 px-6 py-3 text-emerald-400 transition hover:bg-emerald-400 hover:text-black sm:w-auto"
+            >
+              <Mail size={18} />
+              Email Me
+            </a>
+
+            <Link
+              href="/cv"
+              className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-white/10 px-6 py-3 text-gray-300 transition hover:border-emerald-400 hover:text-emerald-400 sm:w-auto"
+            >
+              <FileText size={18} />
+              View CV
+            </Link>
+          </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 md:justify-start">
             {socialLinks.map((item, index) => {
