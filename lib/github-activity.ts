@@ -39,7 +39,7 @@ export type LogLine = {
   timestamp: string;
   command: string;
   detail?: string[];
-  isPrivate?: boolean;
+  isPrivate: boolean;
   kind: LogKind;
 };
 
