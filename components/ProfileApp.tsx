@@ -1,24 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import Hero from "./Hero";
 import AboutSection from "./AboutSection";
 import ProjectsSection from "./ProjectsSection";
 import MilestonesSection from "./MilestonesSection";
 import NotesSection from "./NotesSection";
-import TestimonialsSection from "./TestimonialsSection";
 import ContactSection from "./ContactSection";
 import Footer from "./Footer";
 
-const navItems = [
-  "Home",
-  "About",
-  "Projects",
-  "Milestones",
-  "Notes",
-  "Testimonials",
-  "Contact",
+type NavItem =
+  | { label: string; type: "tab" }
+  | { label: string; type: "link"; href: string };
+
+const navItems: NavItem[] = [
+  { label: "Home", type: "tab" },
+  { label: "About", type: "tab" },
+  { label: "Projects", type: "tab" },
+  { label: "Milestones", type: "tab" },
+  { label: "Notes", type: "tab" },
+  { label: "Dev Log", type: "link", href: "/dev-log" },
+  { label: "Contact", type: "tab" },
 ];
 
 export default function ProfileApp() {
@@ -59,19 +63,29 @@ export default function ProfileApp() {
           </h1>
 
           <div className="hidden items-center gap-8 text-sm text-gray-300 md:flex">
-            {navItems.map((item) => (
-              <button
-                key={item}
-                onClick={() => handleChangeSection(item)}
-                className={`pb-1 transition ${
-                  activeSection === item
-                    ? "border-b border-emerald-400 text-emerald-400"
-                    : "hover:text-emerald-400"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
+            {navItems.map((item) =>
+              item.type === "link" ? (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="pb-1 transition hover:text-emerald-400"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.label}
+                  onClick={() => handleChangeSection(item.label)}
+                  className={`pb-1 transition ${
+                    activeSection === item.label
+                      ? "border-b border-emerald-400 text-emerald-400"
+                      : "hover:text-emerald-400"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              )
+            )}
           </div>
 
           <button
@@ -83,19 +97,29 @@ export default function ProfileApp() {
         </div>
 
         <div className="mt-4 flex flex-wrap justify-center gap-3 pb-1 text-xs text-gray-300 md:hidden">
-          {navItems.map((item) => (
-            <button
-              key={item}
-              onClick={() => handleChangeSection(item)}
-              className={`shrink-0 rounded-full px-3.5 py-2 transition ${
-                activeSection === item
-                  ? "bg-emerald-400 text-black"
-                  : "bg-white/[0.04] hover:text-emerald-400"
-              }`}
-            >
-              {item}
-            </button>
-          ))}
+          {navItems.map((item) =>
+            item.type === "link" ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="shrink-0 rounded-full bg-white/[0.04] px-3.5 py-2 transition hover:text-emerald-400"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.label}
+                onClick={() => handleChangeSection(item.label)}
+                className={`shrink-0 rounded-full px-3.5 py-2 transition ${
+                  activeSection === item.label
+                    ? "bg-emerald-400 text-black"
+                    : "bg-white/[0.04] hover:text-emerald-400"
+                }`}
+              >
+                {item.label}
+              </button>
+            )
+          )}
         </div>
       </nav>
 
@@ -112,7 +136,6 @@ export default function ProfileApp() {
           {activeSection === "Projects" && <ProjectsSection />}
           {activeSection === "Milestones" && <MilestonesSection />}
           {activeSection === "Notes" && <NotesSection />}
-          {activeSection === "Testimonials" && <TestimonialsSection />}
           {activeSection === "Contact" && <ContactSection />}
         </motion.div>
       </AnimatePresence>

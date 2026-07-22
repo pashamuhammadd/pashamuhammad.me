@@ -28,21 +28,12 @@ export default function Footer() {
             © 2026 Pasha Muhammad. All Rights Reserved.
           </p>
 
-          <div className="flex items-center gap-5">
-            <Link
-              href="/dev-log"
-              className="text-xs text-gray-500 transition hover:text-emerald-400 sm:text-sm"
-            >
-              Dev Log
-            </Link>
-
-            <Link
-              href="/cv"
-              className="text-xs text-gray-500 transition hover:text-emerald-400 sm:text-sm"
-            >
-              View CV
-            </Link>
-          </div>
+          <Link
+            href="/cv"
+            className="text-xs text-gray-500 transition hover:text-emerald-400 sm:text-sm"
+          >
+            View CV
+          </Link>
         </div>
       </div>
     </footer>

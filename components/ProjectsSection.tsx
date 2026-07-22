@@ -9,6 +9,7 @@ const projects = [
     type: "GameFi • Life Simulation • Solana",
     status: "Beta Development",
     url: "https://lifetopiaworld.io",
+    image: "https://lifetopiaworld.io/images/og/lifetopia-og.png",
     description:
       "A cozy life simulation and social sandbox game built around farming, fishing, crafting, trading, quests, and community interaction.",
     tags: ["Game", "Solana", "Web3"],
@@ -18,18 +19,20 @@ const projects = [
     type: "Game Studio • Digital Venture",
     status: "Live",
     url: "https://nimiagames.com",
+    image: "https://nimiagames.com/og-image.png",
     description:
       "A game studio focused on building original games, interactive experiences, and long-term digital IP for global audiences.",
     tags: ["Studio", "Games", "Business"],
   },
   {
-    title: "pashamuhammad.me",
-    type: "Founder Profile • Personal Brand",
+    title: "Solana Pasundan",
+    type: "Web3 Community • Solana • Indonesia",
     status: "Live",
-    url: "https://pashamuhammad.me",
+    url: "https://solanapasundan.fun",
+    image: "https://solanapasundan.fun/id/opengraph-image?4dbca8755cd42e31",
     description:
-      "A personal founder platform designed to showcase my journey, projects, milestones, notes, and collaboration opportunities.",
-    tags: ["Founder", "Profile", "Brand"],
+      "An independent builder community for learning, building, and collaborating across the Solana ecosystem, with workshops, hackathons, mentoring, and a builder directory for Pasundan and Indonesia.",
+    tags: ["Community", "Solana", "Web3"],
   },
 ];
 
@@ -72,11 +75,20 @@ export default function ProjectsSection() {
                 delay: index * 0.12,
               }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-white/[0.04] p-5 transition hover:border-emerald-400/80 sm:p-6"
+              className="group relative overflow-hidden rounded-3xl border border-emerald-400/20 bg-white/[0.04] transition hover:border-emerald-400/80"
             >
+              <div className="h-40 w-full overflow-hidden bg-black/20 sm:h-44">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={project.image}
+                  alt={`${project.title} cover`}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+              </div>
+
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.22),transparent_45%)] opacity-0 transition duration-500 group-hover:opacity-100" />
 
-              <div className="relative z-10">
+              <div className="relative z-10 p-5 sm:p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs text-gray-400 sm:text-sm">

@@ -43,21 +43,15 @@ export const metadata: Metadata = {
     siteName: "Pasha Muhammad",
     type: "website",
     locale: "en_US",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Pasha Muhammad Personal Website",
-      },
-    ],
+    // The preview image is generated automatically by app/opengraph-image.tsx,
+    // no need to list a static image here.
   },
   twitter: {
     card: "summary_large_image",
     title: "Pasha Muhammad | Founder, Web3 Builder, GameFi Entrepreneur",
     description:
       "Founder of Nimia Games and Lifetopia World. Building digital ventures across gaming, Web3, AI, and emerging technologies.",
-    images: ["/og-image.png"],
+    // The preview image is generated automatically by app/twitter-image.tsx.
     creator: "@mochnuribrahimpasha",
   },
   alternates: {
