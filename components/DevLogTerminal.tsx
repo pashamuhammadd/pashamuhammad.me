@@ -73,9 +73,21 @@ function LogEntry({ line }: { line: LogLine }) {
         <span className="text-[10px] sm:text-xs">[{formatExact(line.timestamp)}]</span>
         <Icon size={13} className="shrink-0 text-emerald-400" />
         <span className="text-emerald-400">$</span>
-        <span className="text-white">
-          <TypedText text={line.command} />
-        </span>
+        {line.url ? (
+          <a
+            href={line.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white underline-offset-4 hover:text-emerald-300 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+          >
+            <TypedText text={line.command} />
+            <span className="sr-only"> (opens GitHub in a new tab)</span>
+          </a>
+        ) : (
+          <span className="text-white">
+            <TypedText text={line.command} />
+          </span>
+        )}
         {line.isPrivate ? (
           <span className="text-amber-400">[private]</span>
         ) : null}
@@ -92,8 +104,14 @@ function LogEntry({ line }: { line: LogLine }) {
 
 export default function DevLogTerminal({
   initial,
+  endpoint = "/api/dev-log",
+  pollMs = POLL_INTERVAL_MS,
+  className = "h-full",
 }: {
   initial: GitHubActivityResult;
+  endpoint?: string;
+  pollMs?: number;
+  className?: string;
 }) {
   const [data, setData] = useState<GitHubActivityResult>(initial);
   const [lastSynced, setLastSynced] = useState<Date | null>(null);
@@ -105,7 +123,8 @@ export default function DevLogTerminal({
       isFetching.current = true;
 
       try {
-        const response = await fetch("/api/dev-log", { cache: "no-store" });
+        if (document.hidden) return;
+        const response = await fetch(endpoint, { cache: "no-store" });
         if (response.ok) {
           const fresh = (await response.json()) as GitHubActivityResult;
           setData(fresh);
@@ -118,14 +137,14 @@ export default function DevLogTerminal({
       }
     }
 
-    const interval = setInterval(poll, POLL_INTERVAL_MS);
+    const interval = setInterval(poll, pollMs);
     return () => clearInterval(interval);
-  }, []);
+  }, [endpoint, pollMs]);
 
   const { lines, errorMessage, usingToken } = data;
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-none border-y border-emerald-400/20 bg-black sm:rounded-2xl sm:border shadow-[0_0_60px_rgba(16,185,129,0.08)]">
+    <div className={`relative flex ${className} flex-col overflow-hidden rounded-none border-y border-emerald-400/20 bg-black sm:rounded-2xl sm:border shadow-[0_0_60px_rgba(16,185,129,0.08)]`}>
       {/* retro scanline overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-10 opacity-[0.06]"
@@ -160,11 +179,22 @@ export default function DevLogTerminal({
 
       <div className="relative z-20 flex-1 overflow-y-auto p-4 font-mono text-[11px] leading-relaxed sm:p-6 sm:text-sm">
         {lines.length === 0 ? (
-          <p className="text-gray-500">
-            $ no recent activity found
-            {errorMessage ? ` (${errorMessage})` : ""}
-            <span className="ml-1 animate-pulse text-emerald-400">&#9611;</span>
-          </p>
+          <div className="space-y-3">
+            <p className="text-gray-500">
+              $ {errorMessage ? "GitHub activity is unavailable right now" : "no recent public activity found"}
+              {errorMessage ? ` (${errorMessage})` : ""}
+              <span className="ml-1 animate-pulse text-emerald-400">&#9611;</span>
+            </p>
+            <a
+              href="https://github.com/pashamuhammadd"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-emerald-400 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+            >
+              → View my GitHub profile
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
         ) : (
           <div className="space-y-4">
             {lines.map((line) => (
@@ -185,7 +215,7 @@ export default function DevLogTerminal({
         <span>
           {lastSynced
             ? `synced ${lastSynced.toLocaleTimeString()}`
-            : "auto-refreshing every 90s"}
+            : `auto-refreshing every ${Math.round(pollMs / 1000)}s`}
         </span>
       </div>
     </div>

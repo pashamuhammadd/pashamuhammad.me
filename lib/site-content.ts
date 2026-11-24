@@ -13,13 +13,14 @@ export const site = {
   location: "Cianjur, Indonesia",
   primaryCta: "Discuss a project",
   signature: "From an idea to something you can play.",
-  email: "pasha@nimiastudio.com",
+  email: "mochnuribrahimpasha@gmail.com",
   telegram: "https://t.me/pashamuhammadd",
   github: "https://github.com/pashamuhammadd",
   description:
     "Software developer and founder of Nimia Studio in Cianjur, Indonesia. I build web platforms, games, and products on Solana.",
 } as const;
 
+/** Core stack, shown first. Extended list comes from the CV and public repos. */
 export const engineeringStack = [
   "TypeScript",
   "React / Next.js",
@@ -27,6 +28,16 @@ export const engineeringStack = [
   "Supabase",
   "Unity",
   "Solana",
+  "JavaScript",
+  "Tailwind CSS",
+  "PostgreSQL",
+  "Firebase",
+  "Phaser.js",
+  "Rust",
+  "Anchor",
+  "Web Audio API",
+  "Git",
+  "Turborepo",
 ] as const;
 
 export type Project = {
@@ -116,3 +127,41 @@ export const projects: Project[] = [
 
 export const howIBuild =
   "I design the architecture, write the code, and test each release. AI helps me compare approaches and debug faster. I make the technical decisions and review what ships.";
+
+export type BuildStep = {
+  id: string;
+  label: string;
+  command: string;
+  detail: string;
+  ai?: string;
+};
+
+/** Visual walkthrough of the howIBuild copy above. */
+export const buildSteps: BuildStep[] = [
+  {
+    id: "design",
+    label: "Design",
+    command: "plan --architecture",
+    detail: "I design the architecture: data, services, and how each part talks to the others.",
+    ai: "compare approaches",
+  },
+  {
+    id: "build",
+    label: "Build",
+    command: "write --code",
+    detail: "I write the code, from the first prototype to production features.",
+  },
+  {
+    id: "test",
+    label: "Test",
+    command: "test --release",
+    detail: "Each release is tested before it reaches players or clients.",
+    ai: "debug faster",
+  },
+  {
+    id: "ship",
+    label: "Ship",
+    command: "review && ship",
+    detail: "I make the technical decisions and review what ships.",
+  },
+];

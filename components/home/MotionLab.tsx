@@ -288,12 +288,18 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
       g.setTransform(1, 0, 0, 1, 0, 0);
       g.clearRect(0, 0, w, h);
 
-      // dot grid in CSS-pixel space, covering the full canvas
-      g.fillStyle = C.grid;
+      // dot grid in CSS-pixel space that fades out toward the edges so the
+      // drawing blends into the page instead of sitting in a box
       const step = 16 * dpr;
       const size = Math.max(1, Math.round(dpr));
+      const reach = Math.min(w, h) * 0.62;
       for (let x = step / 2; x < w; x += step) {
-        for (let y = step / 2; y < h; y += step) g.fillRect(x, y, size, size);
+        for (let y = step / 2; y < h; y += step) {
+          const fade = 1 - Math.hypot(x - w / 2, y - h / 2) / reach;
+          if (fade <= 0) continue;
+          g.fillStyle = `rgba(70, 110, 98, ${(0.75 * fade).toFixed(3)})`;
+          g.fillRect(x, y, size, size);
+        }
       }
 
       const k = Math.min(w / DESIGN_W, h / DESIGN_H);
@@ -354,21 +360,24 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
   const current = MODES[mode];
 
   return (
-    <div
-      ref={stageRef}
-      className="overflow-hidden rounded-md border border-[#3a4046] bg-[#171a20]"
-    >
-      <div className="flex items-center justify-between gap-3 border-b border-[#30363b] px-3.5 py-2.5 font-mono text-xs text-[#c6d3ce] sm:px-4">
-        <span className="flex items-center gap-2 font-semibold text-[#f1f4ef]">
-          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#00ce99]" />
-          Motion lab
-        </span>
-        <span aria-live="polite">
-          {current.index} / {current.label}
-        </span>
-      </div>
+    <div ref={stageRef} className="relative">
+      {/* soft light behind the drawing, fading into the page */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-[-10%] bg-[radial-gradient(closest-side,rgba(0,206,153,0.16),rgba(0,206,153,0.05)_55%,transparent)]"
+      />
 
-      <div className="relative bg-[radial-gradient(ellipse_at_center,#1b3230,#171a20_70%)]">
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between font-mono text-[0.7rem] tracking-wide text-[#8f9a97] sm:text-xs">
+          <span className="flex items-center gap-2 text-[#c6d3ce]">
+            <span aria-hidden="true" className="chip-dot h-1.5 w-1.5 rounded-full bg-[#00ce99]" />
+            Motion lab
+          </span>
+          <span aria-live="polite">
+            {current.index} / {current.label}
+          </span>
+        </div>
+
         {failed ? (
           <StaticIris label={current.describe} />
         ) : (
@@ -376,7 +385,7 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
             ref={canvasRef}
             role="img"
             aria-label={current.describe}
-            className="block aspect-[1.45] w-full font-mono sm:aspect-[1.7]"
+            className="block aspect-[1.3] w-full font-mono sm:aspect-[1.4]"
           />
         )}
       </div>
@@ -384,7 +393,7 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
       <div
         role="group"
         aria-label="Motion lab controls"
-        className="grid grid-cols-3 gap-1.5 border-t border-[#30363b] p-1.5 font-mono text-xs sm:text-[0.8rem]"
+        className="relative mx-auto mt-1 flex w-full max-w-[30rem] items-stretch gap-1 rounded-full border border-[#34383f] bg-[#1b1c23]/80 p-1 font-mono text-[0.72rem] backdrop-blur sm:text-[0.78rem]"
       >
         {(Object.keys(MODES) as Mode[]).map((key) => (
           <button
@@ -392,7 +401,7 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
             type="button"
             aria-pressed={mode === key}
             onClick={() => setMode(key)}
-            className="min-h-11 rounded-[4px] border border-transparent px-1.5 leading-tight text-[#c5ccca] transition-colors hover:bg-white/[0.04] hover:text-[#f1f4ef] aria-pressed:border-[#00ce99] aria-pressed:bg-[#00ce99]/10 aria-pressed:text-[#3ff0c0]"
+            className="min-h-10 flex-1 rounded-full px-2 leading-tight text-[#aab3b1] transition-colors hover:text-[#f1f4ef] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00ce99] aria-pressed:bg-[#00ce99] aria-pressed:font-semibold aria-pressed:text-[#08231a]"
           >
             {MODES[key].label}
           </button>
@@ -400,9 +409,11 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
         <button
           type="button"
           onClick={() => setUserPaused(!paused)}
-          className="min-h-11 rounded-[4px] border border-[#30363b] px-2 text-[#c5ccca] transition-colors hover:bg-white/[0.04] hover:text-[#f1f4ef]"
+          aria-label={paused ? "Play motion" : "Pause motion"}
+          className="flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-full px-3 text-[#aab3b1] transition-colors hover:text-[#f1f4ef] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00ce99]"
         >
-          {paused ? "Play motion" : "Pause motion"}
+          <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
+          <span className="hidden sm:inline">{paused ? "Play" : "Pause"}</span>
         </button>
       </div>
     </div>
@@ -423,7 +434,7 @@ function StaticIris({ label }: { label: string }) {
       role="img"
       aria-label={label}
       viewBox={`${-DESIGN_W / 2} ${-DESIGN_H / 2} ${DESIGN_W} ${DESIGN_H}`}
-      className="block aspect-[1.45] w-full sm:aspect-[1.7]"
+      className="block aspect-[1.3] w-full sm:aspect-[1.4]"
     >
       <circle r="128" fill="none" stroke={C.ring} />
       <circle r="110" fill="none" stroke={C.ringHi} strokeWidth="1.6" />

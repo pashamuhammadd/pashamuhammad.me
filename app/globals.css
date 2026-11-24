@@ -91,3 +91,138 @@ body {
 .article-content em {
   color: #e5e7eb;
 }
+/* ========================= */
+/* HOME: shared motion       */
+/* ========================= */
+
+@property --glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes glow-spin {
+  to {
+    --glow-angle: 360deg;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes chip-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes flow-pulse {
+  from { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  to { left: 100%; opacity: 0; }
+}
+
+/* Card with a moving emerald light running around its frame. */
+.glow-frame {
+  position: relative;
+  isolation: isolate;
+  border-radius: 12px;
+}
+
+.glow-frame::before,
+.glow-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--glow-angle),
+    #2b3036 0deg,
+    #2b3036 200deg,
+    #00ce99 285deg,
+    #b9ffe8 315deg,
+    #00ce99 335deg,
+    #2b3036 360deg
+  );
+  animation: glow-spin var(--glow-speed, 7s) linear infinite;
+  animation-delay: var(--glow-delay, 0s);
+}
+
+/* the 1px frame */
+.glow-frame::before {
+  z-index: 1;
+  padding: 1px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* soft outer light */
+.glow-frame::after {
+  z-index: -1;
+  inset: -1px;
+  filter: blur(14px);
+  opacity: 0.28;
+  transition: opacity 0.3s ease;
+}
+
+.glow-frame:hover::after,
+.glow-frame:focus-within::after {
+  opacity: 0.6;
+}
+
+.marquee-track {
+  animation: marquee var(--marquee-speed, 48s) linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+.caret {
+  animation: caret-blink 1.05s steps(1) infinite;
+}
+
+.chip-dot {
+  animation: chip-pulse 2.4s ease-in-out infinite;
+}
+
+.flow-pulse {
+  animation: flow-pulse 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-frame::before,
+  .glow-frame::after,
+  .marquee-track,
+  .caret,
+  .chip-dot,
+  .flow-pulse {
+    animation: none;
+  }
+
+  .glow-frame::before,
+  .glow-frame::after {
+    --glow-angle: 120deg;
+  }
+
+  /* Without the scroll animation, show the whole list wrapped. */
+  .marquee-track {
+    flex-wrap: wrap;
+    width: auto;
+  }
+
+  .marquee-copy {
+    display: none;
+  }
+}
