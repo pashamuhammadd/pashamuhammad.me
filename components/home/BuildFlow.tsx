@@ -57,27 +57,27 @@ export default function BuildFlow({ steps }: { steps: BuildStep[] }) {
         </span>
       </div>
 
-      {/* pipeline */}
-      <ol className="relative mt-6 grid gap-0 sm:grid-cols-4">
+      {/* pipeline: horizontal on every screen size */}
+      <ol className="relative mt-6 grid grid-cols-4">
         {steps.map((step, index) => {
           const done = reduced || index < active;
           const isActive = index === active;
           const last = index === steps.length - 1;
           return (
-            <li key={step.id} className="relative flex gap-4 pb-6 sm:block sm:pb-0">
+            <li key={step.id} className="relative flex flex-col items-center text-center">
               {/* connector to the next step */}
               {!last ? (
                 <span
                   aria-hidden="true"
-                  className="absolute top-10 bottom-0 left-[19px] w-px bg-[#34383f] sm:top-[19px] sm:right-0 sm:bottom-auto sm:left-[calc(50%+20px)] sm:h-px sm:w-[calc(100%-40px)] sm:translate-x-0"
+                  className="absolute top-[17px] left-[calc(50%+18px)] h-px w-[calc(100%-36px)] bg-[#34383f] sm:top-[19px] sm:left-[calc(50%+20px)] sm:w-[calc(100%-40px)]"
                 >
                   <span
-                    className={`absolute inset-0 origin-top bg-[#00ce99] transition-transform duration-700 sm:origin-left ${
-                      done ? "scale-100" : "scale-y-0 sm:scale-x-0 sm:scale-y-100"
+                    className={`absolute inset-0 origin-left bg-[#00ce99] transition-transform duration-700 ${
+                      done ? "scale-x-100" : "scale-x-0"
                     }`}
                   />
                   {isActive && running ? (
-                    <span className="flow-pulse absolute top-1/2 hidden h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#b9ffe8] shadow-[0_0_12px_#00ce99] sm:block" />
+                    <span className="flow-pulse absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#b9ffe8] shadow-[0_0_12px_#00ce99]" />
                   ) : null}
                 </span>
               ) : null}
@@ -89,10 +89,10 @@ export default function BuildFlow({ steps }: { steps: BuildStep[] }) {
                   setActive(index);
                   setManual(true);
                 }}
-                className="group relative z-10 flex shrink-0 items-center gap-4 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00ce99] sm:mx-auto sm:flex-col sm:gap-3 sm:text-center"
+                className="group relative z-10 flex flex-col items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00ce99] sm:gap-3"
               >
                 <span
-                  className={`flex h-10 w-10 items-center justify-center rounded-full border font-mono text-xs transition-all duration-500 ${
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border font-mono text-[0.7rem] transition-all duration-500 sm:h-10 sm:w-10 sm:text-xs ${
                     isActive
                       ? "scale-110 border-[#00ce99] bg-[#00ce99] text-[#08231a] shadow-[0_0_24px_rgba(0,206,153,0.55)]"
                       : done
@@ -104,13 +104,13 @@ export default function BuildFlow({ steps }: { steps: BuildStep[] }) {
                 </span>
                 <span>
                   <span
-                    className={`block font-semibold transition-colors ${
+                    className={`block text-sm font-semibold transition-colors sm:text-base ${
                       isActive ? "text-[#f1f4ef]" : "text-[#bec2c4]"
                     }`}
                   >
                     {step.label}
                   </span>
-                  <span className="block font-mono text-[0.7rem] text-[#8f9a97]">
+                  <span className="hidden font-mono text-[0.7rem] text-[#8f9a97] sm:block">
                     {step.command}
                   </span>
                 </span>
@@ -119,13 +119,13 @@ export default function BuildFlow({ steps }: { steps: BuildStep[] }) {
               {/* AI assist badge for the steps where AI helps */}
               {step.ai ? (
                 <span
-                  className={`mt-2 ml-auto self-start rounded-full border px-2 py-0.5 font-mono text-[0.65rem] transition-all duration-500 sm:absolute sm:top-[88px] sm:left-1/2 sm:mt-3 sm:ml-0 sm:-translate-x-1/2 sm:whitespace-nowrap ${
+                  className={`mt-2 rounded-full border px-2 py-0.5 font-mono text-[0.62rem] whitespace-nowrap transition-all duration-500 sm:text-[0.65rem] ${
                     isActive
                       ? "border-[#00ce99] bg-[#00ce99]/15 text-[#3ff0c0] shadow-[0_0_14px_rgba(0,206,153,0.35)]"
                       : "border-dashed border-[#3a3f46] text-[#8f9a97]"
                   }`}
                 >
-                  AI · {step.ai}
+                  AI<span className="hidden lg:inline"> · {step.ai}</span>
                 </span>
               ) : null}
             </li>
@@ -134,7 +134,7 @@ export default function BuildFlow({ steps }: { steps: BuildStep[] }) {
       </ol>
 
       {/* live caption */}
-      <div className="relative mt-4 rounded-md border border-[#2f343a] bg-[#14161b]/80 px-4 py-3 font-mono text-[0.8rem] leading-relaxed sm:mt-16">
+      <div className="relative mt-5 rounded-md border border-[#2f343a] bg-[#14161b]/80 px-4 py-3 font-mono text-[0.78rem] leading-relaxed sm:text-[0.8rem]">
         <p className="text-[#8f9a97]">
           <span className="text-[#00ce99]">$</span> {current.command}
         </p>

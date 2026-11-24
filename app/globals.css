@@ -130,6 +130,56 @@ body {
   to { left: 100%; opacity: 0; }
 }
 
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scan-down {
+  from { transform: translateY(-120%); }
+  to { transform: translateY(420%); }
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+@keyframes term-sweep {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(900%); }
+}
+
+@keyframes sync-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.sig-ring {
+  background: conic-gradient(from 0deg, transparent 0 55%, #00ce99 80%, #b9ffe8 90%, transparent 100%);
+  animation: spin-slow 3.2s linear infinite;
+}
+
+.sig-scan {
+  animation: scan-down 2.8s ease-in-out infinite;
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #00ce99 0%, #b9ffe8 25%, #00ce99 50%, #b9ffe8 75%, #00ce99 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+.term-sweep {
+  animation: term-sweep 5.5s linear infinite;
+}
+
+.sync-fill {
+  transform-origin: left;
+  animation: sync-fill var(--sync-ms, 60000ms) linear forwards;
+}
+
 /* Card with a moving emerald light running around its frame. */
 .glow-frame {
   position: relative;
@@ -207,7 +257,12 @@ body {
   .marquee-track,
   .caret,
   .chip-dot,
-  .flow-pulse {
+  .flow-pulse,
+  .sig-ring,
+  .sig-scan,
+  .shimmer-text,
+  .term-sweep,
+  .sync-fill {
     animation: none;
   }
 

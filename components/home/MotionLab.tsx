@@ -53,12 +53,10 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [mode, setMode] = useState<Mode>("servo");
-  // null = follow the visitor's motion preference until they press the button.
-  const [userPaused, setUserPaused] = useState<boolean | null>(null);
   const [failed, setFailed] = useState(false);
-  const reducedMotion = usePrefersReducedMotion();
-  // Reduced motion starts on a static frame.
-  const paused = userPaused ?? reducedMotion;
+  // Reduced motion shows a static frame. Otherwise the loop runs while the
+  // panel is on screen and the tab is visible.
+  const paused = usePrefersReducedMotion();
 
   // Live values read by the render loop without re-subscribing.
   const modeRef = useRef<Mode>(mode);
@@ -393,7 +391,7 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
       <div
         role="group"
         aria-label="Motion lab controls"
-        className="relative mx-auto mt-1 flex w-full max-w-[30rem] items-stretch gap-1 rounded-full border border-[#34383f] bg-[#1b1c23]/80 p-1 font-mono text-[0.72rem] backdrop-blur sm:text-[0.78rem]"
+        className="relative mx-auto mt-1 flex w-full max-w-[22rem] items-stretch gap-1 rounded-full border border-[#34383f] bg-[#1b1c23]/80 p-1 font-mono text-[0.72rem] backdrop-blur sm:text-[0.78rem]"
       >
         {(Object.keys(MODES) as Mode[]).map((key) => (
           <button
@@ -406,15 +404,6 @@ export default function MotionLab({ nodes }: { nodes: Node[] }) {
             {MODES[key].label}
           </button>
         ))}
-        <button
-          type="button"
-          onClick={() => setUserPaused(!paused)}
-          aria-label={paused ? "Play motion" : "Pause motion"}
-          className="flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-full px-3 text-[#aab3b1] transition-colors hover:text-[#f1f4ef] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00ce99]"
-        >
-          <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
-          <span className="hidden sm:inline">{paused ? "Play" : "Pause"}</span>
-        </button>
       </div>
     </div>
   );

@@ -97,12 +97,59 @@ function StackChip({ item }: { item: string }) {
   );
 }
 
+/** Animated signature card: spinning ring, scan line, shimmering "play". */
+function Signature() {
+  const lead = site.signature.replace(/play\.$/, "");
+  return (
+    <figure
+      className="glow-frame col-span-2 justify-self-start @[1000px]:col-span-1"
+      style={{ "--glow-speed": "5s", borderRadius: "10px" } as CSSProperties}
+    >
+      <div className="relative z-0 m-px flex items-center gap-3 rounded-[9px] bg-[#171a20] py-2 pr-4 pl-2.5">
+        <div className="relative h-10 w-10 shrink-0">
+          <span aria-hidden="true" className="sig-ring absolute -inset-[3px] rounded-[8px]" />
+          <div className="relative h-10 w-10 overflow-hidden rounded-[6px] bg-[#171a20]">
+            <Image
+              src="/pasha-avatar.webp"
+              alt=""
+              width={40}
+              height={40}
+              className="h-10 w-10 object-cover grayscale"
+            />
+            <span
+              aria-hidden="true"
+              className="sig-scan absolute inset-x-0 top-0 h-2.5 bg-gradient-to-b from-transparent via-[#00ce99]/45 to-transparent"
+            />
+          </div>
+        </div>
+        <blockquote className="min-w-0 text-[0.82rem] leading-snug sm:text-sm">
+          <p className="font-semibold text-[#f1f4ef]">
+            {lead}
+            <span className="shimmer-text">play</span>.
+          </p>
+          <footer className="mt-0.5 flex items-center gap-1.5 font-mono text-[0.68rem] text-[#8f9a97]">
+            <span aria-hidden="true">idea</span>
+            <span aria-hidden="true" className="relative h-px w-10 bg-[#34383f]">
+              <span className="flow-pulse absolute top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#b9ffe8] shadow-[0_0_8px_#00ce99]" />
+            </span>
+            <span aria-hidden="true" className="text-[#00ce99]">play</span>
+            <span className="text-[#bec2c4]">· {site.name}</span>
+          </footer>
+        </blockquote>
+      </div>
+    </figure>
+  );
+}
+
 export function StackStrip() {
   return (
     <section aria-labelledby="stack-label" className={`${container} pt-6`}>
       <div className="@container border-y border-[#3a3b44] py-4">
-        <div className="grid gap-4 @[1000px]:grid-cols-[auto_minmax(0,1fr)_auto] @[1000px]:items-center @[1000px]:gap-6">
-          <h2 id="stack-label" className={`${sectionLabel} shrink-0`}>
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-4 @[1000px]:grid-cols-[auto_minmax(0,1fr)_auto] @[1000px]:gap-6">
+          <h2
+            id="stack-label"
+            className={`${sectionLabel} max-w-[6.5rem] text-xs leading-tight sm:max-w-none sm:text-sm`}
+          >
             Engineering stack
           </h2>
 
@@ -129,19 +176,7 @@ export function StackStrip() {
             </div>
           </div>
 
-          <figure className="flex min-h-12 items-center gap-3 @[1000px]:border-l @[1000px]:border-[#3a3b44] @[1000px]:pl-6">
-            <Image
-              src="/pasha-avatar.webp"
-              alt=""
-              width={40}
-              height={40}
-              className="h-10 w-10 shrink-0 rounded-[5px] border border-[#49544e] object-cover grayscale"
-            />
-            <blockquote className="text-sm leading-snug">
-              <p className="font-semibold text-[#f1f4ef]">{site.signature}</p>
-              <footer className="font-mono text-xs text-[#bec2c4]">{site.name}</footer>
-            </blockquote>
-          </figure>
+          <Signature />
         </div>
       </div>
     </section>
@@ -166,10 +201,12 @@ export function SelectedWork({ previews }: { previews: (string | null)[] }) {
         </span>
       </div>
 
-      <ol className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      {/* 2 columns on phones and tablets, 3 on desktop. */}
+      <ol className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 lg:gap-6">
         {projects.map((project, index) => {
           const isSelf = project.url === site.url;
-          const wide = index === projects.length - 1 && projects.length % 3 === 1;
+          // The last card fills the row it would otherwise leave half empty.
+          const wide = index === projects.length - 1;
           const domain = new URL(project.url).hostname;
           const frameStyle = {
             "--glow-delay": `${-index * 1.3}s`,
@@ -179,37 +216,42 @@ export function SelectedWork({ previews }: { previews: (string | null)[] }) {
           return (
             <li
               key={project.name}
-              className={`glow-frame ${wide ? "md:col-span-2 lg:col-span-3" : ""}`}
+              className={`glow-frame ${wide ? "col-span-2 lg:col-span-3" : ""}`}
               style={frameStyle}
             >
               <a
                 href={project.url}
+                aria-label={`${project.name}, ${project.role}${isSelf ? "" : " (opens in a new tab)"}`}
                 {...(isSelf ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                className={`group relative z-0 m-px flex h-[calc(100%-2px)] flex-col overflow-hidden rounded-[11px] bg-[#171a20] transition-transform duration-300 hover:-translate-y-0.5 ${
-                  wide ? "lg:grid lg:grid-cols-3" : ""
+                className={`group relative z-0 m-px h-[calc(100%-2px)] overflow-hidden rounded-[11px] bg-[#171a20] transition-transform duration-300 hover:-translate-y-0.5 ${
+                  wide ? "grid grid-cols-2 lg:grid-cols-3" : "flex flex-col"
                 } ${focusRing} focus-visible:outline-offset-2`}
               >
-                <div className="relative aspect-[1200/630] overflow-hidden border-b border-[#2b3036] lg:border-b-0">
+                <div
+                  className={`relative overflow-hidden border-[#2b3036] ${
+                    wide ? "min-h-36 border-r lg:aspect-[1200/630]" : "aspect-[1200/630] border-b"
+                  }`}
+                >
                   <ProjectPreview
                     src={previews[index]}
                     name={project.name}
                     domain={domain}
                     index={index}
                   />
-                  <span className="absolute top-3 left-3 rounded-full bg-[#0f1114]/80 px-2.5 py-1 font-mono text-[0.68rem] text-[#3ff0c0] backdrop-blur">
+                  <span className="absolute top-2 left-2 rounded-full bg-[#0f1114]/80 px-2 py-0.5 font-mono text-[0.6rem] text-[#3ff0c0] backdrop-blur sm:top-3 sm:left-3 sm:px-2.5 sm:py-1 sm:text-[0.68rem]">
                     {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
                   </span>
                 </div>
 
-                <div className={`flex flex-1 flex-col p-5 ${wide ? "lg:col-span-2 lg:justify-center lg:border-l lg:border-[#2b3036] lg:px-8" : ""}`}>
-                  <p className="font-mono text-[0.75rem] text-[#00ce99]">{project.role}</p>
-                  <h3 className="mt-1 text-[1.45rem] leading-tight font-bold tracking-[-0.03em] text-[#f1f4ef] transition-colors group-hover:text-[#3ff0c0]">
+                <div className={`flex flex-1 flex-col p-3 sm:p-5 ${wide ? "justify-center lg:col-span-2 lg:px-8" : ""}`}>
+                  <p className="font-mono text-[0.62rem] text-[#00ce99] sm:text-[0.75rem]">{project.role}</p>
+                  <h3 className="mt-0.5 text-[1rem] leading-tight font-bold tracking-[-0.03em] text-[#f1f4ef] transition-colors group-hover:text-[#3ff0c0] sm:mt-1 sm:text-[1.45rem]">
                     {project.name}
                   </h3>
-                  <p className="mt-2 font-mono text-[0.8rem] leading-relaxed text-[#bec2c4]">
+                  <p className="mt-1.5 line-clamp-3 font-mono text-[0.68rem] leading-relaxed text-[#bec2c4] sm:mt-2 sm:line-clamp-none sm:text-[0.8rem]">
                     {project.description}
                   </p>
-                  <p className="mt-3 flex flex-wrap gap-1.5 font-mono text-[0.68rem] text-[#aab3b1]">
+                  <p className="mt-3 hidden flex-wrap gap-1.5 font-mono text-[0.68rem] text-[#aab3b1] sm:flex">
                     <span className="sr-only">Built with: </span>
                     {project.built.map((item) => (
                       <span key={item} className="rounded-full border border-[#30353b] px-2 py-0.5">
@@ -217,12 +259,11 @@ export function SelectedWork({ previews }: { previews: (string | null)[] }) {
                       </span>
                     ))}
                   </p>
-                  <span className="mt-auto flex items-center justify-between gap-3 pt-4 font-mono text-xs text-[#8f9a97]">
-                    {domain}
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#30353b] text-[#00ce99] transition-colors group-hover:border-[#00ce99] group-hover:bg-[#00ce99] group-hover:text-[#08231a]">
+                  <span className="mt-auto flex items-center justify-between gap-2 pt-3 font-mono text-[0.62rem] text-[#8f9a97] sm:pt-4 sm:text-xs">
+                    <span className="truncate">{domain}</span>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#30353b] text-[#00ce99] transition-colors group-hover:border-[#00ce99] group-hover:bg-[#00ce99] group-hover:text-[#08231a] sm:h-8 sm:w-8">
                       <Arrow />
                     </span>
-                    {isSelf ? null : <span className="sr-only"> (opens in a new tab)</span>}
                   </span>
                 </div>
               </a>
@@ -301,7 +342,7 @@ export function HowIBuild() {
 }
 
 export function Contact() {
-  const secondary = `inline-flex min-h-12 items-center gap-2 rounded-[4px] border border-[#4a4c55] px-5 font-mono text-sm text-[#f1f4ef] transition-colors hover:border-[#00ce99] hover:text-[#00ce99] ${focusRing}`;
+  const secondary = `inline-flex min-h-12 items-center justify-center gap-2 rounded-[4px] border border-[#4a4c55] px-5 font-mono text-sm text-[#f1f4ef] transition-colors hover:border-[#00ce99] hover:text-[#00ce99] ${focusRing}`;
 
   return (
     <section
@@ -330,10 +371,10 @@ export function Contact() {
               Send a short brief by email or Telegram.
             </p>
           </div>
-          <div className="relative flex flex-wrap gap-3 md:justify-end">
+          <div className="relative grid grid-cols-2 gap-3 sm:flex sm:flex-wrap md:justify-end">
             <a
               href={`mailto:${site.email}`}
-              className={`inline-flex min-h-12 max-w-full items-center gap-2 rounded-[4px] bg-[#00ce99] px-5 font-bold break-all text-[#08231a] transition-colors hover:bg-[#3ff0c0] ${focusRing}`}
+              className={`col-span-2 inline-flex min-h-12 max-w-full items-center justify-center gap-2 rounded-[4px] bg-[#00ce99] px-5 text-sm font-bold break-all text-[#08231a] sm:text-base transition-colors hover:bg-[#3ff0c0] ${focusRing}`}
             >
               {site.email}
             </a>

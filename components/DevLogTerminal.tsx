@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   Activity,
   CircleDot,
@@ -64,11 +64,17 @@ function Typewriter({ text, speed }: { text: string; speed: number }) {
   return <>{text.slice(0, visibleCount)}</>;
 }
 
-function LogEntry({ line }: { line: LogLine }) {
+function LogEntry({ line, active }: { line: LogLine; active: boolean }) {
   const Icon = KIND_ICON[line.kind] ?? Terminal;
 
   return (
-    <div>
+    <div
+      className={`-mx-2 rounded-r border-l-2 px-2 py-1 transition-colors duration-500 ${
+        active
+          ? "border-emerald-400 bg-emerald-400/[0.07]"
+          : "border-transparent"
+      }`}
+    >
       <p className="flex flex-wrap items-center gap-2 text-gray-500">
         <span className="text-[10px] sm:text-xs">[{formatExact(line.timestamp)}]</span>
         <Icon size={13} className="shrink-0 text-emerald-400" />
@@ -115,7 +121,30 @@ export default function DevLogTerminal({
 }) {
   const [data, setData] = useState<GitHubActivityResult>(initial);
   const [lastSynced, setLastSynced] = useState<Date | null>(null);
+  const [syncRound, setSyncRound] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(Math.round(pollMs / 1000));
+  const [activeLine, setActiveLine] = useState(0);
   const isFetching = useRef(false);
+  const reducedMotion = usePrefersReducedMotion();
+  const lineCount = data.lines.length;
+
+  // Walk a highlight through the log so the terminal always looks alive.
+  useEffect(() => {
+    if (reducedMotion || lineCount < 2) return;
+    const timer = setInterval(() => {
+      if (!document.hidden) setActiveLine((i) => (i + 1) % lineCount);
+    }, 1800);
+    return () => clearInterval(timer);
+  }, [reducedMotion, lineCount]);
+
+  // Countdown to the next sync, restarted after every poll.
+  useEffect(() => {
+    const due = Date.now() + pollMs;
+    const timer = setInterval(() => {
+      setSecondsLeft(Math.max(0, Math.round((due - Date.now()) / 1000)));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [pollMs, syncRound]);
 
   useEffect(() => {
     async function poll() {
@@ -124,6 +153,7 @@ export default function DevLogTerminal({
 
       try {
         if (document.hidden) return;
+        setSyncRound((n) => n + 1);
         const response = await fetch(endpoint, { cache: "no-store" });
         if (response.ok) {
           const fresh = (await response.json()) as GitHubActivityResult;
@@ -152,6 +182,10 @@ export default function DevLogTerminal({
           backgroundImage:
             "repeating-linear-gradient(0deg, #fff 0px, #fff 1px, transparent 1px, transparent 3px)",
         }}
+      />
+      <div
+        aria-hidden="true"
+        className="term-sweep pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-transparent via-emerald-400/[0.06] to-transparent"
       />
       <div
         className="pointer-events-none absolute inset-0 z-10 opacity-[0.05]"
@@ -197,8 +231,12 @@ export default function DevLogTerminal({
           </div>
         ) : (
           <div className="space-y-4">
-            {lines.map((line) => (
-              <LogEntry key={line.id} line={line} />
+            {lines.map((line, index) => (
+              <LogEntry
+                key={line.id}
+                line={line}
+                active={!reducedMotion && index === activeLine % lines.length}
+              />
             ))}
 
             <p className="text-emerald-400">
@@ -208,14 +246,21 @@ export default function DevLogTerminal({
         )}
       </div>
 
-      <div className="relative z-20 flex items-center justify-between gap-3 border-t border-white/10 bg-white/[0.02] px-4 py-2 text-[10px] text-gray-600 sm:text-xs">
+      <div className="relative z-20 flex items-center justify-between gap-3 border-t border-white/10 bg-white/[0.02] px-4 py-2 text-[10px] text-gray-500 sm:text-xs">
+        <span
+          aria-hidden="true"
+          key={syncRound}
+          className="sync-fill absolute inset-x-0 top-0 h-px bg-emerald-400/70"
+          style={{ "--sync-ms": `${pollMs}ms` } as CSSProperties}
+        />
         <span>
           {usingToken ? "public + private repos" : "public repos only"}
         </span>
         <span>
           {lastSynced
             ? `synced ${lastSynced.toLocaleTimeString()}`
-            : `auto-refreshing every ${Math.round(pollMs / 1000)}s`}
+            : "synced on load"}
+          <span className="text-emerald-400/80"> · next sync in {secondsLeft}s</span>
         </span>
       </div>
     </div>

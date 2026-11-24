@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 import { site } from "@/lib/site-content";
 
 export const container = "mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10";
@@ -6,7 +7,6 @@ export const container = "mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10";
 const nav = [
   { label: "Work", href: "/#work" },
   { label: "Devlog", href: "/dev-log" },
-  { label: "Notes", href: "/notes" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -24,9 +24,15 @@ export function SiteHeader() {
           {site.domain}
         </Link>
 
-        <span className="font-mono text-xs text-[#bec2c4] md:order-last md:text-sm">
-          {site.location}
-        </span>
+        <address className="flex items-center gap-1.5 rounded-full border border-[#34383f] bg-[#1b1c23] py-1 pr-3 pl-2 font-mono text-[0.72rem] text-[#bec2c4] not-italic md:order-last md:text-sm">
+          <span aria-hidden="true" className="relative flex h-4 w-4 items-center justify-center text-[#00ce99]">
+            <span className="chip-dot absolute inset-0 rounded-full bg-[#00ce99]/25" />
+            <MapPin size={14} strokeWidth={2.2} className="relative" />
+          </span>
+          <span className="sr-only">Location: </span>
+          <span className="sm:hidden" aria-hidden="true">{site.location.split(",")[0]}</span>
+          <span className="sr-only sm:not-sr-only">{site.location}</span>
+        </address>
 
         <nav
           aria-label="Primary"
@@ -48,7 +54,6 @@ export function SiteHeader() {
 }
 
 const footerLinks = [
-  { label: "Notes", href: "/notes", external: false },
   { label: "CV", href: "/cv", external: false },
   { label: "Dev log", href: "/dev-log", external: false },
   { label: "GitHub", href: site.github, external: true },
