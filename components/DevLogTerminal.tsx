@@ -64,6 +64,95 @@ function Typewriter({ text, speed }: { text: string; speed: number }) {
   return <>{text.slice(0, visibleCount)}</>;
 }
 
+/**
+ * Types `text` out, holds it, erases it, and starts again, forever.
+ * Decorative: the full text is given to screen readers separately.
+ */
+function LoopTyper({ text }: { text: string }) {
+  const reducedMotion = usePrefersReducedMotion();
+  if (reducedMotion) return <>{text}</>;
+  return <LoopTyperRun key={text} text={text} />;
+}
+
+function LoopTyperRun({ text }: { text: string }) {
+  const [count, setCount] = useState(0);
+  const [erasing, setErasing] = useState(false);
+
+  useEffect(() => {
+    let wait = erasing ? 14 : 42;
+    if (!erasing && count === text.length) wait = 2600; // hold the full line
+    if (erasing && count === 0) wait = 500; // short blank before retyping
+
+    const timer = setTimeout(() => {
+      if (!erasing && count === text.length) setErasing(true);
+      else if (erasing && count === 0) setErasing(false);
+      else setCount((c) => c + (erasing ? -1 : 1));
+    }, wait);
+    return () => clearTimeout(timer);
+  }, [count, erasing, text]);
+
+  return <>{text.slice(0, count)}</>;
+}
+
+function formatShortDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function LatestActivity({ line }: { line: LogLine }) {
+  const Icon = KIND_ICON[line.kind] ?? Terminal;
+  const typed = [line.command, ...(line.detail ?? []).slice(0, 1)].join("\n");
+  const body = (
+    <>
+      <span className="sr-only">{typed}</span>
+      <span aria-hidden="true" className="whitespace-pre-wrap break-words">
+        <span className="text-emerald-400">$ </span>
+        <span className="text-white">
+          <LoopTyper text={typed} />
+        </span>
+        <span className="caret ml-0.5 inline-block h-[1.05em] w-[0.55em] translate-y-[2px] bg-emerald-400" />
+      </span>
+    </>
+  );
+
+  return (
+    <section
+      aria-label="Latest activity"
+      className="relative z-20 border-b border-emerald-400/20 bg-emerald-400/[0.04] px-4 py-3.5 font-mono text-[11px] leading-relaxed sm:px-6 sm:text-sm"
+    >
+      <p className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] tracking-wide text-gray-400 uppercase sm:text-xs">
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+        </span>
+        <span className="text-emerald-400">Latest activity</span>
+        <span aria-hidden="true">·</span>
+        <Icon size={12} className="text-emerald-400" />
+        <time dateTime={line.timestamp}>{formatShortDate(line.timestamp)}</time>
+      </p>
+      <p className="min-h-[3.2em]">
+        {line.url ? (
+          <a
+            href={line.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+          >
+            {body}
+            <span className="sr-only"> (opens GitHub in a new tab)</span>
+          </a>
+        ) : (
+          body
+        )}
+      </p>
+    </section>
+  );
+}
+
 function LogEntry({ line, active }: { line: LogLine; active: boolean }) {
   const Icon = KIND_ICON[line.kind] ?? Terminal;
 
@@ -113,8 +202,11 @@ export default function DevLogTerminal({
   endpoint = "/api/dev-log",
   pollMs = POLL_INTERVAL_MS,
   className = "h-full",
+  showLatest = false,
 }: {
   initial: GitHubActivityResult;
+  /** Pin the newest line above the log with a looping typing animation. */
+  showLatest?: boolean;
   endpoint?: string;
   pollMs?: number;
   className?: string;
@@ -126,7 +218,9 @@ export default function DevLogTerminal({
   const [activeLine, setActiveLine] = useState(0);
   const isFetching = useRef(false);
   const reducedMotion = usePrefersReducedMotion();
-  const lineCount = data.lines.length;
+  const pinned = showLatest ? data.lines[0] : undefined;
+  const listLines = pinned ? data.lines.slice(1) : data.lines;
+  const lineCount = listLines.length;
 
   // Walk a highlight through the log so the terminal always looks alive.
   useEffect(() => {
@@ -196,11 +290,11 @@ export default function DevLogTerminal({
       />
 
       <div className="relative z-20 flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3">
-        <span className="h-3 w-3 rounded-full bg-red-500/80" />
-        <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
-        <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+        <span className="h-3 w-3 shrink-0 rounded-full bg-red-500/80" />
+        <span className="h-3 w-3 shrink-0 rounded-full bg-yellow-500/80" />
+        <span className="h-3 w-3 shrink-0 rounded-full bg-emerald-500/80" />
 
-        <span className="ml-3 flex items-center gap-2 text-xs text-gray-500">
+        <span className="ml-3 flex min-w-0 items-center gap-2 truncate text-xs text-gray-500">
           <Terminal size={13} />
           pashamuhammadd@github:~/activity
         </span>
@@ -210,6 +304,8 @@ export default function DevLogTerminal({
           live
         </span>
       </div>
+
+      {pinned ? <LatestActivity line={pinned} /> : null}
 
       <div className="relative z-20 flex-1 overflow-y-auto p-4 font-mono text-[11px] leading-relaxed sm:p-6 sm:text-sm">
         {lines.length === 0 ? (
@@ -231,11 +327,11 @@ export default function DevLogTerminal({
           </div>
         ) : (
           <div className="space-y-4">
-            {lines.map((line, index) => (
+            {listLines.map((line, index) => (
               <LogEntry
                 key={line.id}
                 line={line}
-                active={!reducedMotion && index === activeLine % lines.length}
+                active={!reducedMotion && index === activeLine % listLines.length}
               />
             ))}
 

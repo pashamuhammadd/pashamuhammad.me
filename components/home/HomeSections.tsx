@@ -314,6 +314,7 @@ export function DevlogSection({ initial }: { initial: GitHubActivityResult }) {
         initial={initial}
         endpoint="/api/dev-log?scope=public"
         pollMs={60_000}
+        showLatest
         className="min-h-[300px] max-h-[440px]"
       />
     </section>
