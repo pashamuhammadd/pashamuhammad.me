@@ -5,7 +5,6 @@ import {
   Activity,
   CircleDot,
   FolderGit2,
-  GitBranch,
   GitCommitHorizontal,
   GitFork,
   GitPullRequest,
@@ -14,6 +13,7 @@ import {
   Tag,
   Terminal,
 } from "lucide-react";
+import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 import type { GitHubActivityResult, LogKind, LogLine } from "@/lib/github-activity";
 
 const POLL_INTERVAL_MS = 90_000;
@@ -40,46 +40,26 @@ function formatExact(dateString: string) {
   });
 }
 
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(query.matches);
-
-    const handler = (event: MediaQueryListEvent) => setReduced(event.matches);
-    query.addEventListener("change", handler);
-    return () => query.removeEventListener("change", handler);
-  }, []);
-
-  return reduced;
-}
-
 function TypedText({ text, speed = 14 }: { text: string; speed?: number }) {
   const reducedMotion = usePrefersReducedMotion();
-  const [visibleCount, setVisibleCount] = useState(reducedMotion ? text.length : 0);
+  if (reducedMotion) return <>{text}</>;
+  // Keyed by text so a changed line restarts its typing from zero.
+  return <Typewriter key={text} text={text} speed={speed} />;
+}
+
+function Typewriter({ text, speed }: { text: string; speed: number }) {
+  const [visibleCount, setVisibleCount] = useState(0);
 
   useEffect(() => {
-    if (reducedMotion) {
-      setVisibleCount(text.length);
-      return;
-    }
-
-    setVisibleCount(0);
     let count = 0;
-
     const interval = setInterval(() => {
       count += 1;
       setVisibleCount(count);
-
-      if (count >= text.length) {
-        clearInterval(interval);
-      }
+      if (count >= text.length) clearInterval(interval);
     }, speed);
 
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, reducedMotion]);
+  }, [text, speed]);
 
   return <>{text.slice(0, visibleCount)}</>;
 }

@@ -21,7 +21,7 @@ export function generateOgImage() {
           justifyContent: "center",
           backgroundColor: "#1f1f27",
           backgroundImage:
-            "radial-gradient(circle at 25% 20%, rgba(52,211,153,0.25), transparent 45%), radial-gradient(circle at 80% 85%, rgba(52,211,153,0.15), transparent 40%)",
+            "radial-gradient(circle at 25% 20%, rgba(0,206,153,0.25), transparent 45%), radial-gradient(circle at 80% 85%, rgba(0,206,153,0.15), transparent 40%)",
           fontFamily: "sans-serif",
         }}
       >
@@ -31,12 +31,13 @@ export function generateOgImage() {
             width: 232,
             height: 232,
             borderRadius: "9999px",
-            border: "6px solid rgba(52,211,153,0.5)",
+            border: "6px solid rgba(0,206,153,0.5)",
             marginBottom: 36,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
+            alt=""
             src={imageBase64}
             width={220}
             height={220}
@@ -66,11 +67,11 @@ export function generateOgImage() {
             display: "flex",
             marginTop: 18,
             fontSize: 28,
-            color: "#34d399",
+            color: "#00ce99",
             fontWeight: 600,
           }}
         >
-          Founder, Web3 Builder, GameFi Entrepreneur
+          Software Developer &amp; Founder of Nimia Studio
         </div>
 
         <div

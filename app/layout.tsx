@@ -15,30 +15,30 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://pashamuhammad.me"),
   title: {
-    default: "Pasha Muhammad | Founder, Web3 Builder, GameFi Entrepreneur",
+    default: "Pasha Muhammad | Software Developer & Founder of Nimia Studio",
     template: "%s | Pasha Muhammad",
   },
   description:
-    "Personal website of Pasha Muhammad, founder of Nimia Games and Lifetopia World. Building digital ventures across gaming, Web3, AI, and emerging technologies.",
+    "Software developer and founder of Nimia Studio in Cianjur, Indonesia. I build web platforms, games, and products on Solana.",
   keywords: [
     "Pasha Muhammad",
     "Muhammad Nur Ibrahim Pasha",
-    "Nimia Games",
+    "Nimia Studio",
+    "Software Developer",
+    "Next.js Developer",
+    "Solana Developer",
+    "Game Developer",
     "Lifetopia World",
-    "Web3 Founder",
-    "GameFi",
-    "Solana Builder",
-    "AI Products",
-    "Digital Startup",
-    "Indonesia Founder",
+    "Cianjur",
+    "Indonesia",
   ],
   authors: [{ name: "Pasha Muhammad" }],
   creator: "Pasha Muhammad",
   publisher: "Pasha Muhammad",
   openGraph: {
-    title: "Pasha Muhammad | Founder, Web3 Builder, GameFi Entrepreneur",
+    title: "Pasha Muhammad | Software Developer & Founder of Nimia Studio",
     description:
-      "Founder of Nimia Games and Lifetopia World. Building digital ventures across gaming, Web3, AI, and emerging technologies.",
+      "Software developer and founder of Nimia Studio in Cianjur, Indonesia. I build web platforms, games, and products on Solana.",
     url: "https://pashamuhammad.me",
     siteName: "Pasha Muhammad",
     type: "website",
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pasha Muhammad | Founder, Web3 Builder, GameFi Entrepreneur",
+    title: "Pasha Muhammad | Software Developer & Founder of Nimia Studio",
     description:
-      "Founder of Nimia Games and Lifetopia World. Building digital ventures across gaming, Web3, AI, and emerging technologies.",
+      "Software developer and founder of Nimia Studio in Cianjur, Indonesia. I build web platforms, games, and products on Solana.",
     // The preview image is generated automatically by app/twitter-image.tsx.
     creator: "@mochnuribrahimpasha",
   },
@@ -71,6 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

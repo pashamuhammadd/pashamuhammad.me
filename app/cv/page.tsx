@@ -5,11 +5,12 @@ import { ArrowLeft, Mail, MapPin } from "lucide-react";
 import { FaGithub, FaLinkedin, FaTelegram, FaDiscord } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import PrintButton from "@/components/PrintButton";
+import { projects, site } from "@/lib/site-content";
 
 export const metadata: Metadata = {
   title: "CV / Resume",
   description:
-    "CV and resume of Pasha Muhammad, founder of Nimia Games and Lifetopia World, covering experience across gaming, Web3, community, and product building.",
+    "CV of Pasha Muhammad, software developer and founder of Nimia Studio, covering client development, games, Solana products, and community work.",
   alternates: {
     canonical: "https://pashamuhammad.me/cv",
   },
@@ -26,9 +27,9 @@ const experience = [
   {
     year: "2025 - Present",
     role: "Founder",
-    org: "Nimia Games",
+    org: "Nimia Studio",
     description:
-      "Running a game studio focused on original games, interactive experiences, and long-term digital IP for global audiences.",
+      "Running an animation and development studio that builds websites, games, and original animation for clients.",
   },
   {
     year: "2023 - 2024",
@@ -82,26 +83,6 @@ const focusAreas = [
   "AI-Assisted Product Development",
 ];
 
-const projects = [
-  {
-    title: "Lifetopia World",
-    description: "GameFi life simulation and social sandbox on Solana, currently in beta development.",
-    url: "https://lifetopiaworld.io",
-    image: "https://lifetopiaworld.io/images/og/lifetopia-og.png",
-  },
-  {
-    title: "Nimia Games",
-    description: "Game studio building original games and digital IP.",
-    url: "https://nimiagames.com",
-    image: "https://nimiagames.com/og-image.png",
-  },
-  {
-    title: "Solana Pasundan",
-    description: "Independent builder community for the Solana ecosystem across Pasundan and Indonesia.",
-    url: "https://solanapasundan.fun",
-    image: "https://solanapasundan.fun/id/opengraph-image?4dbca8755cd42e31",
-  },
-];
 
 const socialLinks = [
   { title: "X / Twitter", href: "https://x.com/_pashamuhammad", icon: FaXTwitter },
@@ -144,22 +125,22 @@ export default function CvPage() {
             </h1>
 
             <p className="mt-2 text-sm text-gray-400 print:text-black/70">
-              Founder • Builder • Entrepreneur
+              {site.eyebrow}
             </p>
 
             <p className="mt-1 flex items-center gap-1.5 text-xs text-gray-500 print:text-black/60">
               <MapPin size={13} />
-              Indonesia
+              {site.location}
             </p>
           </div>
 
           <div className="space-y-2 text-sm text-gray-400 print:text-black/70">
             <a
-              href="mailto:mochnuribrahimpasha@gmail.com"
+              href={`mailto:${site.email}`}
               className="flex items-center gap-2 break-all hover:text-emerald-400 print:hover:text-black"
             >
               <Mail size={15} className="shrink-0" />
-              mochnuribrahimpasha@gmail.com
+              {site.email}
             </a>
 
             {socialLinks.map((item) => {
@@ -218,10 +199,10 @@ export default function CvPage() {
               Summary
             </h2>
             <p className="text-sm leading-relaxed text-gray-300 sm:text-base print:text-black">
-              Indonesian founder building at the intersection of gaming, Web3, community, and
-              emerging technology. Founder of Lifetopia World and Nimia Games, with a background
-              in community growth and creative production. Focused on turning ambitious ideas into
-              real products, thriving communities, and long-term businesses.
+              Software developer and founder of Nimia Studio, based in Cianjur, Indonesia. I build
+              web platforms, games, and products on Solana, from client work such as SlushyMarkets
+              to my own game, Lifetopia World. I design the architecture, write the code, and test
+              each release, with a background in community growth and creative production.
             </p>
           </section>
 
@@ -260,17 +241,9 @@ export default function CvPage() {
             <div className="space-y-4">
               {projects.map((project) => (
                 <div
-                  key={project.title}
+                  key={project.name}
                   className="flex gap-4 rounded-2xl border border-emerald-400/20 bg-white/[0.04] p-4 print:rounded-none print:border-0 print:border-b print:border-black/10 print:bg-transparent print:p-0 print:pb-5"
                 >
-                  <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-black/20 print:hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={project.image}
-                      alt={`${project.title} cover`}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
                   <div>
                     <a
                       href={project.url}
@@ -278,8 +251,11 @@ export default function CvPage() {
                       rel="noopener noreferrer"
                       className="font-bold text-white hover:text-emerald-400 print:text-black"
                     >
-                      {project.title}
+                      {project.name}
                     </a>
+                    <span className="ml-2 text-xs text-emerald-400 print:text-black/60">
+                      {project.role}
+                    </span>
                     <p className="mt-1 text-sm leading-relaxed text-gray-400 print:text-black/70">
                       {project.description}
                     </p>
